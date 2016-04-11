@@ -1,0 +1,21 @@
+{
+  "name": "null9beta/php-memcache-viewer",
+  "description": "View Memcache entries via CLI or WebInterface",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Marco Roßdeutscher",
+      "email": "null9beta@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Null9beta": "src/"
+    }
+  },
+  "require": {
+    "symfony/yaml": "v2.8.4",
+    "symfony/console": "v2.8.4"
+  }
+}

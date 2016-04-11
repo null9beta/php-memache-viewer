@@ -1,0 +1,12 @@
+# memcache config sample
+persistent_id: sfconf
+servers:
+    - host: 127.0.0.1
+      port: 11211
+    - host: 127.0.0.1
+      port: 11212
+options:
+    - name: OPT_LIBKETAMA_COMPATIBLE
+      value: true
+    - name: OPT_CONNECT_TIMEOUT
+      value: 5
