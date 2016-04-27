@@ -29,10 +29,6 @@ class MemcacheConfigFile extends AbstractMemcacheConfig
      */
     private function loadConfigFromFile($filePath)
     {
-        if ($filePath[0] != '/') {
-            $filePath =  __DIR__ . '/../../../../' . $filePath;
-        }
-
         if (!file_exists($filePath)) {
             throw new \InvalidArgumentException("Error loading config file. {$filePath} does not exist.");
         }
