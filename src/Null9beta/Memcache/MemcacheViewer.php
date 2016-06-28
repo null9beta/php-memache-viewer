@@ -33,7 +33,7 @@ class MemcacheViewer
      * @param $key
      * @return bool
      */
-    private function memcacheHasKey($key)
+    public function memcacheHasKey($key)
     {
         $this->memcache->get($key);
 
