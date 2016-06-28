@@ -37,7 +37,7 @@ class MemcacheViewer
     {
         $this->memcache->get($key);
 
-        return $this->memcache->getResultCode() === \MemcacheReturnCodes::MEMCACHED_NOTFOUND;
+        return $this->memcache->getResultCode() === MemcacheReturnCodes::MEMCACHED_NOTFOUND;
     }
 
     /**

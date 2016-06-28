@@ -1,4 +1,6 @@
 <?php
+namespace Null9beta\Memcache;
+
 /**
  * Class MemcacheReturnCodes
  * @link http://de2.php.net/manual/de/memcached.getresultcode.php
