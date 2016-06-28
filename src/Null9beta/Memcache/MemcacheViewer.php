@@ -3,9 +3,8 @@
 namespace Null9beta\Memcache;
 
 use Null9beta\Memcache\Config\MemcacheConfigConstants;
-use Null9beta\Memcache\Config\MemcacheConfigInterface;
 
-class Memcache implements MemcacheInterface
+class MemcacheViewer
 {
 
     /**
@@ -23,25 +22,11 @@ class Memcache implements MemcacheInterface
     }
 
     /**
-     * @param $key
-     * @return mixed
+     * @return \Memcached
      */
-    public function get($key)
+    public function getMemcached()
     {
-        return $this->memcached->get($key);
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     * @param \DateTime $expiration
-     * @return bool
-     */
-    public function set($key, $value, \DateTime $expiration = null)
-    {
-        $expiration = $expiration ? $expiration->getTimestamp() : null;
-
-        return $this->memcached->set($key, $value, $expiration);
+        return $this->memcached;
     }
 
     /**

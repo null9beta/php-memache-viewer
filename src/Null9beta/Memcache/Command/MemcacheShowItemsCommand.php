@@ -2,9 +2,7 @@
 
 namespace Null9beta\Memcache\Command;
 
-
-use Null9beta\Memcache\Config\MemcacheConfigConstants;
-use Null9beta\Memcache\MemcacheConfig;
+use Null9beta\Memcache\MemcacheViewer;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,8 +27,7 @@ class MemcacheShowItemsCommand extends AbstractMemcacheCommand
                 InputOption::VALUE_OPTIONAL,
                 'filter for keys, this is a regex string delimited with /',
                 ''
-            )
-        ;
+            );
     }
 
     /**
@@ -41,10 +38,11 @@ class MemcacheShowItemsCommand extends AbstractMemcacheCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $memcache = $this->getMemcached($input);
+        $memcache = $this->getMemcachedInstance($input);
+        $memcacheViewer = new MemcacheViewer($memcache);
 
         $filter = $input->getOption(self::OPTION_FILTER);
-        $items = $memcache->find($filter, false);
+        $items = $memcacheViewer->find($filter, false);
 
         $table = new Table($output);
         $table->setHeaders(['Key', 'Value']);
