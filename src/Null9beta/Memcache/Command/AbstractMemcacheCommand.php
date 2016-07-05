@@ -3,9 +3,7 @@
 namespace Null9beta\Memcache\Command;
 
 use Null9beta\Memcache\Config\MemcacheConfigConstants;
-use Null9beta\Memcache\Config\MemcacheConfigFile;
-use Null9beta\Memcache\Config\MemcacheConfigInput;
-use Null9beta\Memcache\Memcache;
+use Null9beta\Memcache\MemcacheFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,18 +46,15 @@ class AbstractMemcacheCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'optional: persist id for memcached object',
                 null
-            )
-        ;
+            );
     }
 
     /**
      * @param InputInterface $input
-     * @return Memcache
+     * @return \Memcached
      */
-    protected function getMemcached(InputInterface $input)
+    protected function getMemcachedInstance(InputInterface $input)
     {
-        $memcacheConfig = null;
-
         $servers = $input->getOption(MemcacheConfigConstants::SERVERS);
         $config = $input->getOption(self::OPTION_CONFIG);
 
@@ -69,13 +64,11 @@ class AbstractMemcacheCommand extends Command
         }
 
         if ($servers) {
-            $memcacheConfig = new MemcacheConfigInput($input);
+            return MemcacheFactory::createInstanceFromConsoleInput($input);
         }
 
         if ($config) {
-            $memcacheConfig = new MemcacheConfigFile($config);
+            return MemcacheFactory::createInstanceFromConfigFile($config);
         }
-
-        return new Memcache($memcacheConfig->getMemcacheInstance());
     }
 }
