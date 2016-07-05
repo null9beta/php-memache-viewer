@@ -3,45 +3,41 @@
 namespace Null9beta\Memcache;
 
 use Null9beta\Memcache\Config\MemcacheConfigConstants;
-use Null9beta\Memcache\Config\MemcacheConfigInterface;
 
-class Memcache implements MemcacheInterface
+class MemcacheViewer
 {
 
     /**
      * @var \Memcached
      */
-    protected $memcached;
+    protected $memcache;
 
     /**
-     * Memcache constructor.
-     * @param \Memcached $memcached
+     * MemcacheViewer constructor.
+     * @param \Memcached $memcache
      */
-    public function __construct(\Memcached $memcached)
+    public function __construct(\Memcached $memcache)
     {
-        $this->memcached = $memcached;
+        $this->memcache = $memcache;
+    }
+
+    /**
+     * @return \Memcached
+     */
+    public function getMemcache()
+    {
+        return $this->memcache;
     }
 
     /**
      * @param $key
-     * @return mixed
-     */
-    public function get($key)
-    {
-        return $this->memcached->get($key);
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     * @param \DateTime $expiration
      * @return bool
      */
-    public function set($key, $value, \DateTime $expiration = null)
+    public function memcacheHasKey($key)
     {
-        $expiration = $expiration ? $expiration->getTimestamp() : null;
+        $this->memcache->get($key);
 
-        return $this->memcached->set($key, $value, $expiration);
+        return $this->memcache->getResultCode() === MemcacheReturnCodes::MEMCACHED_SUCCESS;
     }
 
     /**
@@ -53,7 +49,7 @@ class Memcache implements MemcacheInterface
     {
         $filterPattern = "/{$filter}/";
 
-        $keys = $this->getMemcachedKeys();
+        $keys = $this->getMemcacheKeys();
 
         $items = [];
         foreach ($keys as $key) {
@@ -62,7 +58,7 @@ class Memcache implements MemcacheInterface
                 continue;
             }
 
-            $value = $this->memcached->get($key);
+            $value = $this->memcache->get($key);
 
             if ($asMap) {
                 $items[$key] = $value;
@@ -80,13 +76,13 @@ class Memcache implements MemcacheInterface
     /**
      * @return array
      */
-    protected function getMemcachedKeys()
+    protected function getMemcacheKeys()
     {
         $keys = [];
-        foreach ($this->memcached->getServerList() as $server) {
+        foreach ($this->memcache->getServerList() as $server) {
             $keys = array_merge(
                 $keys,
-                $this->getMemcachedKeysForHost(
+                $this->getMemcacheKeysForHost(
                     $server[MemcacheConfigConstants::SERVER_HOST],
                     $server[MemcacheConfigConstants::SERVER_PORT]
                 )
@@ -103,7 +99,7 @@ class Memcache implements MemcacheInterface
      * @param int $port
      * @return array|int
      */
-    protected static function getMemcachedKeysForHost($host = '127.0.0.1', $port = 11211)
+    protected static function getMemcacheKeysForHost($host = '127.0.0.1', $port = 11211)
     {
         $mem = @fsockopen($host, $port);
         if ($mem === false) {
