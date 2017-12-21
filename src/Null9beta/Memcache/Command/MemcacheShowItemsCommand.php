@@ -42,11 +42,18 @@ class MemcacheShowItemsCommand extends AbstractMemcacheCommand
         $memcacheViewer = new MemcacheViewer($memcache);
 
         $filter = $input->getOption(self::OPTION_FILTER);
-        $items = $memcacheViewer->find($filter, false);
+        $items = collect($memcacheViewer->find($filter, false));
+
+        $flattenedItems = $items->map(function ($item) {
+            if (!is_scalar($item)) {
+                $item[1] = json_encode($item[1]);
+            }
+            return $item;
+        });
 
         $table = new Table($output);
         $table->setHeaders(['Key', 'Value']);
-        $table->setRows($items);
+        $table->setRows($flattenedItems->toArray());
         $table->render();
     }
 }
